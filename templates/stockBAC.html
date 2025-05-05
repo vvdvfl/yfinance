@@ -1,0 +1,54 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirect Example</title>
+    <script>
+        function redirect() {
+            // Get the value from the input field
+            const inputValue = document.getElementById("input-field").value;
+
+            // Construct the URL with the input as a query parameter
+            const redirectUrl = `/get_historic_data?stock=${encodeURIComponent(inputValue)}`;
+
+            // Redirect to the constructed URL
+            window.location.href = redirectUrl;
+        }
+    </script>
+</head>
+<body>
+<h1>Enter Data and Redirect</h1>
+<input type="text" id="input-field" placeholder="Enter something..." />
+<button onclick="redirect()">Submit</button>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
+    <script src="{{ url_for('static', filename='js/trading.js') }}"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>WebSocket Client</h1>
+    <form>
+        <div class="mb-3">
+            <label for="StockType" class="form-label">Stock Type</label>
+            <input type="text" class="form-control" id="StockType" aria-describedby="exampleStockTypeHelp">
+            <div id="exampleStockTypeHelp" class="form-text">e.g., BHEL, SBIN, IRCTC.</div>
+        </div>
+        <button type="button" id="tradeStartButton" class="btn btn-primary" onclick="startTrading('button')">Send</button>
+        <button type="button" id="tradeStopButton" class="btn btn-primary" onclick="stopTrading()">StopTrading</button>
+        <button type="button" id="tradeClearButton" class="btn btn-primary" onclick="clearHistory()">Clear History</button>
+    </form>
+</div>
+
+<div id="response"></div>
+
+
+</body>
+</html>
+

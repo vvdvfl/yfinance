@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Page 1{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-3">
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    More details
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                    <div id="myDiv">
+                        <div class="row">
+                            <div class="col-12 col-md-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Suggestion</h5>
+                                        <span id="CautiousMessage">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Stock Name</h5>
+                                        <span id="stockName">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Current Price</h5>
+                                        <span id="stockCurrentPrice">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Buy Price (50%)</h5>
+                                        <span id="stockBuyPrice50">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Buy Price (61.8%)</h5>
+                                        <span id="stockBuyPrice">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sell Price (61.8%)</h5>
+                                        <span id="stockSellPrice">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <form>
+                <div class="row mb-3">
+                    <div class="col-12 col-md-4">
+                        <label for="StockType" class="form-label">Stock Type</label>
+                        <input type="text" required class="form-control" id="StockType" aria-describedby="exampleStockTypeHelp">
+                        <div id="exampleStockTypeHelp" class="form-text">e.g., BHEL, SBIN, IRCTC.</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="StockQuantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="StockQuantity" aria-describedby="StockQuantityHelp">
+                        <div id="StockQuantityHelp" class="form-text">For mentioned number action takes place.</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="TradeAction" class="form-label">Action</label>
+                        <select class="form-select" id="TradeAction" aria-describedby="TradeActionHelp">
+                            <option selected>Keep watching</option>
+                            <option value="buy">Buy</option>
+                            <option value="sell">Sell</option>
+                        </select>
+                        <div id="TradeActionHelp" class="form-text">Once you change, its immediate effect.</div>
+                    </div>
+                </div>
+
+                <div class="row flex-right">
+
+                    <div class="col-12 col-md-4">
+                        <div class="form-check form-switch  flex-right">
+                            <input class="form-check-input " type="checkbox" role="switch" id="tradeAutomated">
+                            <label class="form-check-label" for="tradeAutomated">Automate action?</label>
+                        </div>
+                        <button type="button" id="tradeStartButton" class="btn btn-primary me-2" onclick="startTrading('button')">Send</button>
+                        <button type="button" class="btn btn-secondary me-2" onclick="stopTrading()">Stop</button>
+                        <button type="button" class="btn btn-danger" onclick="clearHistory()">Clear History</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="response" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<!--<script src="{{ url_for('static', filename='js/trading.js') }}"></script>-->
+
+{% endblock %}

@@ -1,0 +1,35 @@
+<div class="container mt-4">
+    <h2>Trade Details</h2>
+    {% if trade_data.status == "success" %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Exchange</th>
+            <th>Product</th>
+            <th>Trading Symbol</th>
+            <th>Order Type</th>
+            <th>Transaction Type</th>
+            <th>Quantity</th>
+            <th>Average Price</th>
+            <th>Order Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for trade in trade_data.data %}
+        <tr>
+            <td>{{ trade.exchange }}</td>
+            <td>{{ trade.product }}</td>
+            <td>{{ trade.trading_symbol }}</td>
+            <td>{{ trade.order_type }}</td>
+            <td>{{ trade.transaction_type }}</td>
+            <td>{{ trade.quantity }}</td>
+            <td>{{ trade.average_price }}</td>
+            <td>{{ trade.order_timestamp }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No trade details available.</p>
+    {% endif %}
+</div>
