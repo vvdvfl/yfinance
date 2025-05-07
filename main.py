@@ -4,7 +4,7 @@ import yfinance as yf
 import pandas as pd
 import requests
 from flask import request, redirect, url_for, session, render_template
-from selenium import webdriver
+# from selenium import webdriver
 import time
 from services.yfinance.service import *
 from stratagy.Fibonacci import *

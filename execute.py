@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit
 import main
 import json
 
-from services.trading.tradingService import trading_service
+from services.trading.tradingService import trading_service, plain_intraday_stratagy
 from services.upstox.upstoxService import get_trades_of_day
 
 app = Flask(__name__)
@@ -31,15 +31,27 @@ def handle_message(message):
     try:
         # Parse incoming JSON payload
         data = json.loads(message)
+        print(data)
+        payload = data.get('payload')
         message_type = data.get('message_type')
-        stock_type = data.get('stock_type')
+        stock_type = payload.get('stock_type')
         action = data.get('action')
 
         # print(f"Received: {data}")
         # print(message_type)
 
         # Dynamically call methods based on message type
-        if message_type == "trade":
+        if message_type == "plain_intraday_stratagy":
+            intradayResponse = plain_intraday_stratagy(stock_type)
+            print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+            response = {
+                "message": action,
+                "message_type": message_type,
+                "intraday_decission": intradayResponse
+            }
+            print(response)
+            socketio.send(response)
+        elif message_type == "trade":
             response = trading_service(data.get('payload'))
             response["message_type"] = message_type
             socketio.send(response)

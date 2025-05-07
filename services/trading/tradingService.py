@@ -65,3 +65,42 @@ def trading_service(payload):    # print(access_token)
     }
     #get_trades_of_day(instruments_code, stock_name)
     return levels
+
+def plain_intraday_stratagy(stock):
+    print(f"==={stock}===")
+    instruments_code = filter_instruments_with_pandas_filtered(stock)
+    df = fetch_upstox_candles(instruments_code)
+    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
+    print(stock)
+    if len(df) < 2:
+        return "NOT_ENOUGH_DATA", None
+
+    # Calculate VWAP
+    df["tpv"] = df["close"] * df["volume"]
+    df["cum_vol"] = df["volume"].cumsum()
+    df["cum_tpv"] = df["tpv"].cumsum()
+    df["vwap"] = df["cum_tpv"] / df["cum_vol"]
+    first = df.iloc[-2]   # Previous candle
+    second = df.iloc[-1]  # Latest candle
+    vwap = second["vwap"]
+
+    # Strategy logic
+    if second["close"] > first["high"] and second["close"] > vwap:
+        signal = "BUY"
+    elif second["close"] < first["low"] and second["close"] < vwap:
+        signal = "SELL"
+    else:
+        signal = "NO TRADE"
+    current_datetime = datetime.now()
+    current_datetime_formated = current_datetime.strftime("%d-%m-%Y %H:%M:%S")
+    current_price_yfinance = "123"#get_current_price(stock)
+    print(signal)
+    return signal, {
+        "dateTime": current_datetime_formated,
+        "currentPrice": current_price_yfinance,
+        "prev_high": first["high"],
+        "prev_low": first["low"],
+        "close": second["close"],
+        "vwap": vwap
+    }

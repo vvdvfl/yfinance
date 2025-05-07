@@ -65,8 +65,11 @@ def filter_instruments_with_pandas_filtered(trading_symbol):
 
         # Convert the filtered DataFrame back to a JSON-compatible list of dictionaries
         filtered_json = filtered_df.to_dict(orient='records')
+        print("====")
+        print(filtered_json)
+        print("====")
 
-        return filtered_json
+        return filtered_json[0]['instrument_key'] if filtered_json else None
 
     except Exception as e:
         print(f"Error: {e}")
@@ -118,4 +121,22 @@ def find_trade_details(response, trade_symbol):
     :return: Matching trade details or None if not found
     """
     return next((trade for trade in response.get("data", []) if re.search(trade_symbol, trade.get("trading_symbol"), re.IGNORECASE)), None)
+
+
+def fetch_upstox_candles(instruments_code):
+    url = f"https://api.upstox.com/v3/historical-candle/intraday/{instruments_code}/minutes/1"
+    access_token = session.get('access_token')
+    headers = {
+        'Api-Version': '2.0',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + access_token
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        raise Exception(f"Error fetching data: {response.status_code} - {response.text}")
+
+    candles = response.json()["data"]["candles"]
+    df = pd.DataFrame(candles, columns=["timestamp", "open", "high", "low", "close", "volume", "ignored"])
+    df = df.sort_values("timestamp").reset_index(drop=True)
+    return df
 

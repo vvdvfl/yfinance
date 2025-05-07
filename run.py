@@ -1,6 +1,6 @@
 import threading
 import asyncio
-import websockets
+# import websockets
 from flask import Flask
 
 import main
@@ -30,21 +30,21 @@ def run_flask():
 #     # Start WebSocket server in the main thread
 #     asyncio.run(start_server())
 
-
-async def start_server():
-    server = await websockets.serve(handle_client, "localhost", 8765)
-    print("WebSocket server is running on ws://localhost:8765")
-    await server.wait_closed()
+#
+# async def start_server():
+#     server = await websockets.serve(handle_client, "localhost", 8765)
+#     print("WebSocket server is running on ws://localhost:8765")
+#     await server.wait_closed()
 
 if __name__ == '__main__':
     # try:
         # Start Flask in a separate thread
-    flask_thread = threading.Thread(target=run_flask, daemon=True)
-    flask_thread.start()
-
-    # Run WebSocket server inside an asyncio event loop
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(start_server())
+    # flask_thread = threading.Thread(target=run_flask, daemon=True)
+    # flask_thread.start()
+    #
+    # # Run WebSocket server inside an asyncio event loop
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(start_server())
 
     # except KeyboardInterrupt:
     #     print("\nReceived CTRL + C, shutting down...")

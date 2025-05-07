@@ -11,7 +11,12 @@ const host = window.location.hostname;
         });
 
         socket.on('message', function(msg) {
-            handleTradeResponse(msg);
+            const messageType = msg.message_type;
+            if(messageType == "trade") {
+                handleTradeResponse(msg);
+            } else if(messageType == "plain_intraday_stratagy") {
+                handlePlanIntraDayStratagyResponse(msg);
+            }
         });
 
         socket.on('response_html', function(msg) {
@@ -34,7 +39,7 @@ function startInterval(key, duration) {
         return;
     }
 
-    const intervalId = setInterval(() => startTrading("auto"), duration);
+    const intervalId = setInterval(() => startPlainIntradayStratagyTrading("auto"), duration);
     intervalMap[key] = intervalId; // Store interval ID with the key
 }
 // Clear a specific interval by key
@@ -75,10 +80,37 @@ function startTrading(type){
 //        ws.send(payload);
         socket.emit('message', payload);
         if(typeof intervalMap[stock_type] == 'undefined' && type =="button") {
+            startInterval(stock_type, 10000)
+        }
+        disableEnableFields(true)
+}
+function startPlainIntradayStratagyTrading(type){
+        const stock_type = document.getElementById("StockType").value;
+        const quantity = document.getElementById("StockQuantity").value;
+        const action = document.getElementById("TradeAction").value;
+        const automated = document.getElementById("tradeAutomated").checked;
+        // Construct payload
+        const message_type = "plain_intraday_stratagy";
+        const payload = JSON.stringify({
+            message_type,
+            "payload": {
+                stock_type,
+                quantity,
+                action,
+                automated
+            }
+        });
+        document.getElementById("stockName").innerHTML = stock_type;
+        // Send to WebSocket server
+//        ws.send(payload);
+        socket.emit('message', payload);
+        if(typeof intervalMap[stock_type] == 'undefined' && type =="button") {
             startInterval(stock_type, 5000)
         }
         disableEnableFields(true)
 }
+
+
 
 function getDayOrders() {
     const message_type = "dayOrders"
@@ -99,12 +131,15 @@ function handleTradeResponse(jsonResponse) {
         }
         const displayMessage = `@${jsonResponse.dateTime} |  ${jsonResponse.currentPrice}(CP)|  ${jsonResponse.stock_name} | ${jsonResponse.message}` ;
         responseDiv.insertAdjacentHTML('afterbegin', `<p>${displayMessage}</p>`);
-        document.getElementById("stockCurrentPrice").innerHTML = jsonResponse.currentPrice;
+        document.getElementById("stockCurrentPrice").innerHTML = jsonResponse.intraday_decission.currentPrice;
         document.getElementById("stockBuyPrice").innerHTML = jsonResponse.buy_levels?.["61.8%"] || "N/A";
         document.getElementById("stockBuyPrice50").innerHTML = jsonResponse.buy_levels?.["50%"] || "N/A";
         document.getElementById("stockSellPrice").innerHTML = jsonResponse.sell_levels?.["61.8%"] || "N/A";
     }
 
+}
+
+function handlePlanIntraDayStratagyResponse(jsonResponse){
 }
 function stopTrading() {
     const stock_type = document.getElementById("StockType").value;
